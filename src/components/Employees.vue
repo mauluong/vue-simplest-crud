@@ -59,7 +59,7 @@
                     <input v-model="editEmployeeData.employee_id" type="text" />
                   </td>
                   <td>
-                    {{editEmployeeData.employee_name}}
+                    {{editEmployeeName}}
                   </td>
                   <!-- <td>
                     <input v-model="editEmployeeData.employee_name" type="text" />
@@ -145,9 +145,6 @@ export default {
         .get()
         .then(querySnapshot => {
           const employees = [];
-          // querySnapshot.forEach((doc)=>{
-          //   products.push(doc.data())
-          // })
           const employeesArray = [];
           let i = 0;
           querySnapshot.forEach(doc => {
@@ -164,12 +161,6 @@ export default {
             employees.push(employeesArray[i]);
             i++;
           });
-          // for(let key in querySnapshot.docs){
-          //   employeesArray.push(querySnapshot.docs[key].data())
-          //   employeesArray[key].id = querySnapshot.docs[key].id
-          //   employees.push(employeesArray[key])
-          // }
-          console.log(employees);
           this.employees = employees;
         });
     },
@@ -181,12 +172,14 @@ export default {
           .replace(/[\u0300-\u036f]/g, "")
           .replace(/đ/g, "d")
           .replace(/Đ/g, "D")
+          .replace(" ", "")
           .trim() +
         this.employeeForm.employee_fname
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
           .replace(/đ/g, "d")
           .replace(/Đ/g, "D")
+          .replace(" ", "")
           .trim() +
         "." +
         this.employeeForm.employee_dep;
@@ -210,23 +203,26 @@ export default {
     onEdit(employee) {
       this.editId = employee.id;
       this.editEmployeeData.employee_id = employee.employee_id;
-      this.editEmployeeData.employee_name = employee.employee_name;
+      // this.editEmployeeData.employee_name = employee.employee_name;
+      this.editEmployeeName = employee.employee_name;
+      // this.editEmployeeData.employee_fname = employee.employee_fname;
+      // this.editEmployeeData.employee_lname = employee.employee_lname;
       this.editEmployeeData.employee_dep = employee.employee_dep;
     },
     onCancel() {
       this.editId = "";
       this.editEmployeeData.employee_id = "";
-      this.editEmployeeData.employee_name = "";
+      // this.editEmployeeData.employee_name = "";
       this.editEmployeeData.employee_dep = "";
     },
     onEditSubmit(id) {
       db.collection("employees")
         .doc(id)
-        .set(this.editEmployeeData)
+        .update(this.editEmployeeData)
         .then(this.getEmployees);
       this.editId = "";
       this.editEmployeeData.employee_id = "";
-      this.editEmployeeData.employee_name = "";
+      // this.editEmployeeData.employee_name = "";
       this.editEmployeeData.employee_dep = "";
     }
   }
