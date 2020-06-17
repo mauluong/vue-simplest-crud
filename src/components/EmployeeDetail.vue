@@ -32,18 +32,6 @@ export default {
     };
   },
   beforeCreate() {
-    // db.collection('products').where(doc.id, '==' this.$route.params.id).then(querySnapshot =>{
-    //   const products = []
-    //   const productsArray = []
-    //   let i = 0
-    //   querySnapshot.forEach((doc)=>{
-    //     productsArray.push(doc.data())
-    //     productsArray[i].id = doc.id
-    //     products.push(productsArray[i])
-    //     i++
-    //   })
-    //   this.products = products
-    // })
     var docRef = db.collection("employees").doc(this.$route.params.id);
     docRef
       .get()
